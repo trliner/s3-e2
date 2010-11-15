@@ -8,12 +8,12 @@ describe Board do
     @board = Board.new
   end
 
-  it "has eight columns" do
-    @board.columns.count.should == 8
+  it "has eight rows" do
+    @board.grid.keys.count.should == 8
   end
 
-  it "has eight rows" do
-    @board.rows.count.should == 8
+  it "has eight columns" do
+    @board.grid[:row1].keys.count.should == 8
   end
 
   it "has a number of black stones" do

@@ -1,13 +1,19 @@
 class Board
 
-  attr_accessor :columns
-  attr_accessor :rows
+  attr_accessor :grid
   attr_accessor :stones
 
   def initialize
-    @columns = (1..8).to_a
-    @rows = (1..8).to_a
+    @grid = build_grid
     @stones = {:black => 1, :white => 1}
+  end
+
+  def build_grid
+    col_hash = {}
+    (1..8).each {|n| col_hash[:"col#{n}"] = nil}
+    grid = {}
+    (1..8).each {|n| grid[:"row#{n}"] = col_hash}
+    grid
   end
 
 end
