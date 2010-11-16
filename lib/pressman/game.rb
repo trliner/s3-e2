@@ -11,4 +11,9 @@ class Game
     @current_player = @players.first
   end
 
+  def play_one_turn
+    @players.reverse!
+    @current_player = @players.first
+  end
+
 end

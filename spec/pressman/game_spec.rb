@@ -11,4 +11,13 @@ describe Game do
     @game.current_player.should == @black
   end
 
+  it "should alternate players each turn" do
+    @game.start
+    @game.current_player.should == @black
+    @game.play_one_turn
+    @game.current_player.should == @white
+    @game.play_one_turn
+    @game.current_player.should == @black
+  end
+
 end
