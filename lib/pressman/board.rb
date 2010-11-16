@@ -6,10 +6,10 @@ class Board
   attr_accessor :grid
   attr_accessor :stones
 
-  def initialize
+  def initialize(color1, color2)
     @grid = build_grid
-    @stones = {:black => 0, :white => 0}
-    self.place_initial_stones
+    @stones = {color1 => 0, color2 => 0}
+    self.place_initial_stones(color1, color2)
   end
 
   def build_grid
@@ -24,10 +24,10 @@ class Board
     self.stones[color] +=1
   end
 
-  def place_initial_stones
+  def place_initial_stones(color1, color2)
     COLS.each do |col|
-      self.top_rows.each {|row| place_stone(row, col, :white)}
-      self.bottom_rows.each {|row| place_stone(row, col, :black)}
+      self.bottom_rows.each {|row| place_stone(row, col, color1)}
+      self.top_rows.each {|row| place_stone(row, col, color2)}
     end
   end
 

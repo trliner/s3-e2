@@ -1,7 +1,7 @@
 describe Board do
 
   before do
-    @board = Board.new
+    @board = Board.new(:black, :white)
   end
 
   it "has eight rows" do
@@ -19,7 +19,7 @@ end
 describe Board, "when first created" do
 
   before do
-    @board = Board.new
+    @board = Board.new(:black, :white)
   end
 
   it "has sixteen black stones" do
