@@ -1,7 +1,6 @@
 class Board
 
-  COLS = (1..8).collect{|n| :"col#{n}"}
-  ROWS = (1..8).collect{|n| :"row#{n}"}
+  ELEMENT = (0..7).to_a
 
   attr_accessor :grid
   attr_accessor :stones
@@ -13,10 +12,18 @@ class Board
   end
 
   def build_grid
-    grid = Board::ROWS.inject({}) do |grid, row|
-      col_hash =  Board::COLS.inject({}) { |hash, col| hash.merge(col => nil) }
-      grid.merge(row =>col_hash )
+    grid = []
+    ELEMENT.each do |row|
+      grid[row] = []
+      ELEMENT.each do |col|
+        grid[row][col] = nil
+      end
     end
+    grid
+  end
+
+  def pick_up_stone(row, col)
+    self.grid[row][col] = nil
   end
 
   def place_stone(row, col, color)
@@ -25,19 +32,18 @@ class Board
   end
 
   def place_initial_stones(color1, color2)
-    COLS.each do |col|
+    ELEMENT.each do |col|
       self.bottom_rows.each {|row| place_stone(row, col, color1)}
       self.top_rows.each {|row| place_stone(row, col, color2)}
     end
   end
 
   def top_rows
-    [ROWS[0], ROWS[1]]
+    [ELEMENT.first, ELEMENT.first + 1]
   end
 
   def bottom_rows
-    length = ROWS.length
-    [ROWS[length - 1], ROWS[length - 2]]
+    [ELEMENT.last - 1, ELEMENT.last]
   end
 
 end

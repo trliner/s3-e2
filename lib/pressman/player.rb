@@ -7,7 +7,8 @@ class Player
   end
 
   def move_stone(board)
-    board.place_stone(:row4, :col4, self.color)
+    board.pick_up_stone(1, 0)
+    board.place_stone(5, 5, self.color)
   end
 
 end
