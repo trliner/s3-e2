@@ -80,6 +80,13 @@ describe Board, "when validating moves" do
     @board.valid_dest?(@white, [3,1], [3,7]).should == true
   end
 
+  it "allows players to move diagonally" do
+    @board.valid_dest?(@black, [6,0], [4,2]).should == true
+    @board.valid_dest?(@white, [1,0], [4,3]).should == true
+    @board.valid_dest?(@black, [6,7], [4,5]).should == true
+    @board.valid_dest?(@white, [1,7], [4,4]).should == true
+  end
+
 
 
 end
