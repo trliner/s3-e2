@@ -48,18 +48,33 @@ describe Board, "when first created" do
 
 end
 
-describe Board do
+describe Board, "when validating moves" do
 
-  it "doesn't allow players to pick up stone of another color" do
+  before do
     @board = Board.new(:black, :white)
     @black = Player.new(:black)
     @white = Player.new(:white)
+  end
+
+  it "doesn't allow players to pick up stone of another color" do
     @board.valid_stone?(@black, [0, 0]).should == false
     @board.valid_stone?(@white, [7, 7]).should == false
     @board.valid_stone?(@black, [3, 3]).should == false
     @board.valid_stone?(@white, [3, 3]).should == false
-    @board.valid_stone?(@white, [0, 0]).should == true
-    @board.valid_stone?(@black, [7, 7]).should == true
   end
+
+  it "doesn't allow players to pick up a stone with no possible moves" do
+    @board.valid_stone?(@black, [7,7]).should == false
+    @board.valid_stone?(@white, [0,0]).should == false
+    @board.valid_stone?(@white, [1, 0]).should == true
+    @board.valid_stone?(@black, [6, 7]).should == true
+  end
+
+  it "allows players to move up and down" do
+    @board.valid_dest?(@black, [6,7], [3,7]).should == true
+    @board.valid_dest?(@white, [1,7], [4,7]).should == true
+  end
+
+
 
 end

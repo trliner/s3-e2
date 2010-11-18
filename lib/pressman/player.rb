@@ -7,13 +7,10 @@ class Player
   end
 
   def move_stone(board, opts = {})
-    stone_coord = [0,0]
-    until board.valid_stone?(self, stone_coord)
-      stone_coord = board.random_coordinate
-    end
-    square = opts[:sqare] || board.random_coordinate
+    stone_coord = board.random_stone(self)
+    dest_coord = board.random_destination(self, stone_coord)
     board.pick_up_stone(stone_coord)
-    board.place_stone(square, self.color)
+    board.place_stone(dest_coord, self.color)
   end
 
 end
