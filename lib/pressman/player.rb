@@ -6,9 +6,14 @@ class Player
     @color = color
   end
 
-  def move_stone(board)
-    board.pick_up_stone(1, 0)
-    board.place_stone(5, 5, self.color)
+  def move_stone(board, opts = {})
+    stone_coord = [0,0]
+    until board.valid_stone?(self, stone_coord)
+      stone_coord = board.random_coordinate
+    end
+    square = opts[:sqare] || board.random_coordinate
+    board.pick_up_stone(stone_coord)
+    board.place_stone(square, self.color)
   end
 
 end

@@ -47,3 +47,19 @@ describe Board, "when first created" do
   end
 
 end
+
+describe Board do
+
+  it "doesn't allow players to pick up stone of another color" do
+    @board = Board.new(:black, :white)
+    @black = Player.new(:black)
+    @white = Player.new(:white)
+    @board.valid_stone?(@black, [0, 0]).should == false
+    @board.valid_stone?(@white, [7, 7]).should == false
+    @board.valid_stone?(@black, [3, 3]).should == false
+    @board.valid_stone?(@white, [3, 3]).should == false
+    @board.valid_stone?(@white, [0, 0]).should == true
+    @board.valid_stone?(@black, [7, 7]).should == true
+  end
+
+end
