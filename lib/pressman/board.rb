@@ -53,7 +53,7 @@ class Board
   end
 
   def value_at(coord)
-    self.grid[coord.first][coord.last]
+    self.grid[coord.first.to_i][coord.last.to_i]
   end
 
   def valid_stone?(player, stone_coord)
