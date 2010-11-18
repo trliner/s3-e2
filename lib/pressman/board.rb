@@ -67,44 +67,51 @@ class Board
 
   def valid_destinations(player, stone_coord)
     self.valid_up_moves(player, stone_coord) +
-    self.valid_down_moves(player, stone_coord)
+    self.valid_down_moves(player, stone_coord) +
+    self.valid_left_moves(player, stone_coord) +
+    self.valid_right_moves(player, stone_coord)
   end
 
   def valid_up_moves(player, stone_coord)
     row, col = stone_coord
-    rows = ELEMENT.to_a.select{|n| n < row}
-    moves = []
-    catch (:done) do
-      rows.reverse.each do |row|
-        value = self.value_at([row, col])
-        case value
-        when :empty
-          moves << [row, col]
-        when player.color
-          throw :done
-        else
-          moves << [row, col]
-          throw :done
-        end
-      end
-    end
-    moves
+    rows = ELEMENT.to_a.select{|e| e < row}
+    coords = rows.reverse.collect{|r| [r, col]}
+    self.filter_valid_moves(player, coords)
   end
 
   def valid_down_moves(player, stone_coord)
     row, col = stone_coord
-    rows = ELEMENT.to_a.select{|n| n > row}
+    rows = ELEMENT.to_a.select{|e| e > row}
+    coords = rows.collect{|r| [r, col]}
+    self.filter_valid_moves(player, coords)
+  end
+
+  def valid_left_moves(player, stone_coord)
+    row, col = stone_coord
+    cols = ELEMENT.to_a.select{|e| e < col}
+    coords = cols.reverse.collect{|c| [row, c]}
+    self.filter_valid_moves(player, coords)
+  end
+
+  def valid_right_moves(player, stone_coord)
+    row, col = stone_coord
+    cols = ELEMENT.to_a.select{|e| e > col}
+    coords = cols.collect{|c| [row, c]}
+    self.filter_valid_moves(player, coords)
+  end
+
+  def filter_valid_moves(player, coords)
     moves = []
     catch (:done) do
-      rows.each do |row|
-        value = self.value_at([row, col])
+      coords.each do |coord|
+        value = self.value_at(coord)
         case value
         when :empty
-          moves << [row, col]
+          moves << coord
         when player.color
           throw :done
         else
-          moves << [row, col]
+          moves << coord
           throw :done
         end
       end

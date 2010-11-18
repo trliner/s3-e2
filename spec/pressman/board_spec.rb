@@ -75,6 +75,11 @@ describe Board, "when validating moves" do
     @board.valid_dest?(@white, [1,7], [4,7]).should == true
   end
 
+  it "allows players to move left and right" do
+    @board.valid_dest?(@black, [5,7], [5,1]).should == true
+    @board.valid_dest?(@white, [3,1], [3,7]).should == true
+  end
+
 
 
 end
