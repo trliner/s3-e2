@@ -24,6 +24,9 @@ class Player
       end
       stone.deactivate
     end
+    if in_friendly_territory?(board, dest_coord) && !stone.activated?
+      stone.activate
+    end
   end
 
   def select_stone(board, stone_opt)
@@ -48,6 +51,11 @@ class Player
   def on_opposite_side?(board, dest_coord)
     row = board.starting_row.select{|k,v| k != self.color}.first.last
     dest_coord.first == row
+  end
+
+  def in_friendly_territory?(board, dest_coord)
+    home_row = board.starting_row[self.color]
+    (dest_coord.first.to_f - home_row.to_f).abs <= 3
   end
 
   def empty_starting_squares(board)

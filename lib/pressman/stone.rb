@@ -16,4 +16,8 @@ class Stone
     @active = false
   end
 
+  def activate
+    @active = true
+  end
+
 end
