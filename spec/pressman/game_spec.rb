@@ -29,4 +29,12 @@ describe Game do
     @game.play.class.should == Player
   end
 
+  it "will declare a winner if the opponent resigns" do
+    @game.play_one_turn.should == @white
+  end
+
+  it "will declare a winner if the opponent resigns" do
+    @game.play_one_turn
+    @game.play_one_turn.should == @black
+  end
 end

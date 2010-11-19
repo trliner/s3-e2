@@ -23,9 +23,9 @@ class Game
     self.start
     winner = nil
     while winner.nil?
-      self.play_one_turn
+      move = self.play_one_turn
       @board.stones.each do |stone|
-        winner = self.current_player if stone.last == 0
+        winner = self.current_player if (stone.last == 0 || move == :resign)
       end
     end
     winner
