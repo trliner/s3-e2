@@ -33,7 +33,7 @@ describe Board, "when first created" do
   it "has its top two rows filled with white stones" do
     Board::ELEMENT.each do |col|
       @board.top_rows.each do |row|
-        @board.grid[row][col].should == :white
+        @board.color_at([row, col]).should == :white
       end
     end
   end
@@ -41,7 +41,7 @@ describe Board, "when first created" do
   it "has its bottom two rows filled with black stones" do
     Board::ELEMENT.each do |col|
       @board.bottom_rows.each do |row|
-        @board.grid[row][col].should == :black
+        @board.color_at([row, col]).should == :black
       end
     end
   end

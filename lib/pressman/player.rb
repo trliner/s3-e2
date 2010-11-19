@@ -8,17 +8,21 @@ class Player
 
   def move_stone(board, opts = {})
     stone_coord = select_stone(board, opts.delete(:stone))
+    stone = board.stone_at(stone_coord)
     dest_coord = select_dest(board, stone_coord, opts.delete(:dest))
-    board.pick_up_stone(stone_coord)
-    if board.value_at(dest_coord) != :empty
+    stone = board.pick_up_stone(stone_coord)
+    if board.color_at(dest_coord) != :empty
       board.pick_up_stone(dest_coord)
     end
-    board.place_stone(dest_coord, self.color)
-    if (
-      on_opposite_side?(board, dest_coord) &&
-      !empty_starting_squares(board).empty?
-    )
-      regenerate_stone(board)
+    board.place_stone(dest_coord, self.color, stone)
+    if on_opposite_side?(board, dest_coord)
+      if (
+        !empty_starting_squares(board).empty? &&
+        stone.activated?
+      )
+        regenerate_stone(board)
+      end
+      stone.deactivate
     end
   end
 
@@ -49,7 +53,7 @@ class Player
   def empty_starting_squares(board)
     row = board.starting_row[self.color]
     squares = Board::ELEMENT.collect{|col| [row, col]}
-    squares.select{|coord| board.value_at(coord) == :empty}
+    squares.select{|coord| board.color_at(coord) == :empty}
   end
 
   def regenerate_stone(board)

@@ -4,7 +4,7 @@ class Board
 
   attr_accessor :grid
   attr_accessor :stones
-  attr_accessor :starting_row
+  attr_reader :starting_row
 
   def initialize(color1, color2)
     @grid = build_grid
@@ -25,13 +25,15 @@ class Board
   end
 
   def pick_up_stone(coord)
-    color = self.value_at(coord)
+    stone = self.stone_at(coord)
     self.grid[coord.first][coord.last] = :empty
-    self.stones[color] -= 1
+    self.stones[stone.color] -= 1
+    stone
   end
 
-  def place_stone(coord, color)
-    self.grid[coord.first][coord.last] = color
+  def place_stone(coord, color, stone = nil)
+    stone = stone || Stone.new(color)
+    self.grid[coord.first][coord.last] = stone
     self.stones[color] +=1
   end
 
@@ -54,12 +56,17 @@ class Board
     [rand(ELEMENT.count), rand(ELEMENT.count)]
   end
 
-  def value_at(coord)
+  def color_at(coord)
+    contents = self.grid[coord.first.to_i][coord.last.to_i]
+    contents.class == Stone ? contents.color : contents
+  end
+
+  def stone_at(coord)
     self.grid[coord.first.to_i][coord.last.to_i]
   end
 
   def valid_stone?(player, stone_coord)
-    player.color == self.value_at(stone_coord) &&
+    player.color == self.color_at(stone_coord) &&
     !self.valid_destinations(player, stone_coord).empty?
   end
 
@@ -162,7 +169,7 @@ class Board
     moves = []
     catch (:done) do
       coords.each do |coord|
-        value = self.value_at(coord)
+        value = self.color_at(coord)
         case value
         when :empty
           moves << coord
@@ -186,7 +193,7 @@ class Board
     stone_coords = []
     ELEMENT.each do |row|
       ELEMENT.each do |col|
-        stone_coords << [row, col] if self.value_at([row,col]) == player.color
+        stone_coords << [row, col] if self.color_at([row,col]) == player.color
       end
     end
     stones = stone_coords.select{|coord| self.valid_stone?(player, coord)}
