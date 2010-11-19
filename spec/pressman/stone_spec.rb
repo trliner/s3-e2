@@ -1,8 +1,8 @@
-describe Stone do
+describe Pressman:: Stone do
 
   before do
-    @black = Player.new(:black)
-    @board = Board.new(:black, :white)
+    @black = Pressman::Player.new(:black)
+    @board = Pressman::Board.new(:black, :white)
     @stone = @board.stone_at([6,0])
     @black.move_stone(@board, :stone => [6,0], :dest => [1,0])
     @black.move_stone(@board, :stone => [1,0], :dest => [0,0])

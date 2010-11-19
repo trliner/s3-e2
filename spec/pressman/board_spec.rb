@@ -1,25 +1,25 @@
-describe Board do
+describe Pressman::Board do
 
   before do
-    @board = Board.new(:black, :white)
+    @board = Pressman::Board.new(:black, :white)
   end
 
   it "has eight rows" do
-    Board::ELEMENT.count.should == 8
+    Pressman::ELEMENT.count.should == 8
     @board.grid.count.should == 8
   end
 
   it "has eight columns" do
-    Board::ELEMENT.count.should == 8
+    Pressman::ELEMENT.count.should == 8
     @board.grid[0].count.should == 8
   end
 
 end
 
-describe Board, "when first created" do
+describe Pressman::Board, "when first created" do
 
   before do
-    @board = Board.new(:black, :white)
+    @board = Pressman::Board.new(:black, :white)
   end
 
   it "has sixteen black stones" do
@@ -31,7 +31,7 @@ describe Board, "when first created" do
   end
 
   it "has its top two rows filled with white stones" do
-    Board::ELEMENT.each do |col|
+    Pressman::ELEMENT.each do |col|
       @board.top_rows.each do |row|
         @board.color_at([row, col]).should == :white
       end
@@ -39,7 +39,7 @@ describe Board, "when first created" do
   end
 
   it "has its bottom two rows filled with black stones" do
-    Board::ELEMENT.each do |col|
+    Pressman::ELEMENT.each do |col|
       @board.bottom_rows.each do |row|
         @board.color_at([row, col]).should == :black
       end
@@ -48,12 +48,12 @@ describe Board, "when first created" do
 
 end
 
-describe Board, "when validating moves" do
+describe Pressman::Board, "when validating moves" do
 
   before do
-    @board = Board.new(:black, :white)
-    @black = Player.new(:black)
-    @white = Player.new(:white)
+    @board = Pressman::Board.new(:black, :white)
+    @black = Pressman::Player.new(:black)
+    @white = Pressman::Player.new(:white)
   end
 
   it "doesn't allow players to pick up stone of another color" do

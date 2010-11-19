@@ -1,9 +1,9 @@
-describe Game do
+describe Pressman::Game do
 
   before do
-    @black = Player.new(:black)
-    @white = Player.new(:white)
-    @game = Game.new(@black, @white)
+    @black = Pressman::Player.new(:black)
+    @white = Pressman::Player.new(:white)
+    @game = Pressman::Game.new(@black, @white)
     @game.start
   end
 
@@ -26,7 +26,7 @@ describe Game do
   end
 
   it "will declare a winner if the opponent runs out of stones" do
-    @game.play.class.should == Player
+    @game.play.class.should == Pressman:: Player
   end
 
   it "will declare a winner if the opponent resigns" do

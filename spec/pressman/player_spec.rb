@@ -1,15 +1,15 @@
-describe Player do
+describe Pressman:: Player do
 
   it "has a color" do
     color = :black
-    player = Player.new(color)
+    player = Pressman:: Player.new(color)
     player.color.should == color
   end
 
   before do
-    @black = Player.new(:black)
-    @white = Player.new(:white)
-    @board = Board.new(:black, :white)
+    @black = Pressman:: Player.new(:black)
+    @white = Pressman:: Player.new(:white)
+    @board = Pressman:: Board.new(:black, :white)
 
     @white_stone_count = @board.stones[:white]
     @black_stone_count = @board.stones[:black]
