@@ -19,4 +19,19 @@ describe Player do
     @board.stones[:black].should == black_stone_count - 1
   end
 
+  it "will regenerate a stone if possible" do
+    @black = Player.new(:black)
+    @white = Player.new(:white)
+    @board = Board.new(:black, :white)
+
+    black_stone_count = @board.stones[:black]
+    white_stone_count = @board.stones[:white]
+    @black.move_stone(@board, :stone => [6,0], :dest => [5,1])
+    @black.move_stone(@board, :stone => [7,0], :dest => [1,0])
+    @board.stones[:white].should == white_stone_count - 1
+    @black.move_stone(@board, :stone => [1,0], :dest => [0,0])
+    @board.stones[:white].should == white_stone_count - 2
+    @board.stones[:black].should == black_stone_count + 1
+  end
+
 end

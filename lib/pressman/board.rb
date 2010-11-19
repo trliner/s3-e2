@@ -4,10 +4,12 @@ class Board
 
   attr_accessor :grid
   attr_accessor :stones
+  attr_accessor :starting_row
 
   def initialize(color1, color2)
     @grid = build_grid
     @stones = {color1 => 0, color2 => 0}
+    @starting_row = {color1 => ELEMENT.last, color2 => ELEMENT.first}
     self.place_initial_stones(color1, color2)
   end
 
