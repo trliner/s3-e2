@@ -19,4 +19,16 @@ class Game
     @current_player = @players.first
   end
 
+  def play
+    self.start
+    winner = nil
+    while winner.nil?
+      self.play_one_turn
+      @board.stones.each do |stone|
+        winner = self.current_player if stone.last == 0
+      end
+    end
+    winner
+  end
+
 end

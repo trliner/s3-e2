@@ -25,4 +25,8 @@ describe Game do
     @game.board.grid.should_not == original_grid
   end
 
+  it "will declare a winner if the opponent runs out of stones" do
+    @game.play.class.should == Player
+  end
+
 end
