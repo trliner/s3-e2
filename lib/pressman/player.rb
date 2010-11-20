@@ -26,7 +26,7 @@ module Pressman
       if stone_opt.class == Array && board.valid_stone?(self, stone_opt)
         stone_opt
       else
-        board.random_stone(self)
+        board.random_stone_coord(self)
       end
     end
 
@@ -51,15 +51,18 @@ module Pressman
       (dest_coord.first.to_f - home_row.to_f).abs <= 3
     end
 
-    def empty_starting_squares(board)
+    def empty_starting_square_coords(board)
       row = board.starting_row[color]
-      squares = (0..MAX_COL).collect{ |col| [row, col] }
-      squares.select{ |coord| board.color_at(coord).nil? }
+      square_coords = []
+      board.grid[row].each_with_index do |square, col|
+        square_coords << [row, col] if square.nil?
+      end
+      square_coords
     end
 
     def regenerate_stone(board, stone)
-      squares = empty_starting_squares(board)
-      regen_coord = squares[rand(squares.count)]
+      square_coords = empty_starting_square_coords(board)
+      regen_coord = square_coords[rand(square_coords.count)]
       board.place_stone(regen_coord, color) if regen_coord
       stone.deactivate
     end

@@ -28,9 +28,11 @@ module Pressman
     end
 
     def place_initial_stones(color1, color2)
-      (0..MAX_COL).each do |col|
-        BOTTOM_ROWS.each { |row| place_stone([row, col], color1) }
-        TOP_ROWS.each {|row| place_stone([row, col], color2) }
+      BOTTOM_ROWS.each do |row|
+        grid[row].each_index { |col| place_stone([row, col], color1) }
+      end
+      TOP_ROWS.each do |row|
+        grid[row].each_index { |col| place_stone([row, col], color2) }
       end
     end
 
@@ -48,15 +50,14 @@ module Pressman
       destinations[rand(destinations.count)]
     end
 
-    def random_stone(player)
+    def random_stone_coord(player)
       stone_coords = []
-      (0..MAX_ROW).each do |row|
-        (0..MAX_COL).each do |col|
-          stone_coords << [row, col] if color_at([row,col]) == player.color
+      grid.each_with_index do |col_array, row|
+        col_array.each_index do |col|
+          stone_coords << [row, col] if valid_stone?(player, [row,col])
         end
       end
-      stones = stone_coords.select{|coord| valid_stone?(player, coord)}
-      stones[rand(stones.count)]
+      stone_coords[rand(stone_coords.count)]
     end
 
   end

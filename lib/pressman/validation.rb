@@ -54,7 +54,7 @@ module Pressman
     coords = []
     row -= 1
     col += 1
-    while row >= 0 && col <= 7
+    while row >= 0 && col <= MAX_ROW
       coords << [row, col]
       row -= 1
       col += 1
@@ -67,7 +67,7 @@ module Pressman
     coords = []
     row += 1
     col += 1
-    while row <=7 && col <= 7
+    while row <= MAX_ROW && col <= MAX_COL
       coords << [row, col]
       row += 1
       col += 1
@@ -93,7 +93,7 @@ module Pressman
     coords = []
     row += 1
     col -= 1
-    while row <= 7 && col >= 0
+    while row <= MAX_ROW && col >= 0
       coords << [row, col]
       row += 1
       col -= 1

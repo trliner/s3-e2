@@ -31,18 +31,14 @@ describe Pressman::Board, "when first created" do
   end
 
   it "has its top two rows filled with white stones" do
-    (0..Pressman::MAX_COL).each do |col|
-      Pressman::TOP_ROWS.each do |row|
-        @board.color_at([row, col]).should == :white
-      end
+    Pressman::TOP_ROWS.each do |row|
+      @board.grid[row].each {|stone| stone.color.should == :white}
     end
   end
 
   it "has its bottom two rows filled with black stones" do
-    (0..Pressman::MAX_COL).each do |col|
-      Pressman::BOTTOM_ROWS.each do |row|
-        @board.color_at([row, col]).should == :black
-      end
+    Pressman::BOTTOM_ROWS.each do |row|
+      @board.grid[row].each {|stone| stone.color.should == :black}
     end
   end
 
