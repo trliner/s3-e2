@@ -8,29 +8,17 @@ module Pressman
     end
 
     def move_stone(board, opts = {})
-      if opts[:resign]
-        :resign
-      else
-        stone_coord = select_stone(board, opts.delete(:stone))
-        stone = board.stone_at(stone_coord)
-        dest_coord = select_dest(board, stone_coord, opts.delete(:dest))
-        stone = board.pick_up_stone(stone_coord)
-        if board.color_at(dest_coord) != :empty
-          board.pick_up_stone(dest_coord)
-        end
-        board.place_stone(dest_coord, color, stone)
-        if on_opposite_side?(board, dest_coord)
-          if (
-            !empty_starting_squares(board).empty? &&
-            stone.activated?
-          )
-            regenerate_stone(board)
-          end
-          stone.deactivate
-        end
-        if in_friendly_territory?(board, dest_coord) && !stone.activated?
-          stone.activate
-        end
+      return :resign if opts[:resign]
+      stone_coord = select_stone(board, opts.delete(:stone))
+      stone = board.pick_up_stone(stone_coord)
+      dest_coord = select_dest(board, stone_coord, opts.delete(:dest))
+      capture_stone(board, dest_coord)
+      board.place_stone(dest_coord, color, stone)
+      if on_opposite_side?(board, dest_coord) && stone.activated?
+        regenerate_stone(board, stone)
+      end
+      if in_friendly_territory?(board, dest_coord) && !stone.activated?
+        stone.activate
       end
     end
 
@@ -69,10 +57,17 @@ module Pressman
       squares.select{|coord| board.color_at(coord) == :empty}
     end
 
-    def regenerate_stone(board)
+    def regenerate_stone(board, stone)
       squares = empty_starting_squares(board)
       regen_coord = squares[rand(squares.count)]
-      board.place_stone(regen_coord, color)
+      board.place_stone(regen_coord, color) if regen_coord
+      stone.deactivate
+    end
+
+    def capture_stone(board, dest_coord)
+      if board.color_at(dest_coord) != :empty
+        board.pick_up_stone(dest_coord)
+      end
     end
 
   end
