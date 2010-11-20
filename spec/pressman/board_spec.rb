@@ -5,12 +5,12 @@ describe Pressman::Board do
   end
 
   it "has eight rows" do
-    Pressman::ELEMENT.count.should == 8
+    Pressman::BOARD_SIZE.should == 8
     @board.grid.count.should == 8
   end
 
   it "has eight columns" do
-    Pressman::ELEMENT.count.should == 8
+    Pressman::BOARD_SIZE.should == 8
     @board.grid[0].count.should == 8
   end
 
@@ -31,16 +31,16 @@ describe Pressman::Board, "when first created" do
   end
 
   it "has its top two rows filled with white stones" do
-    Pressman::ELEMENT.each do |col|
-      @board.top_rows.each do |row|
+    (0..Pressman::MAX_COL).each do |col|
+      Pressman::TOP_ROWS.each do |row|
         @board.color_at([row, col]).should == :white
       end
     end
   end
 
   it "has its bottom two rows filled with black stones" do
-    Pressman::ELEMENT.each do |col|
-      @board.bottom_rows.each do |row|
+    (0..Pressman::MAX_COL).each do |col|
+      Pressman::BOTTOM_ROWS.each do |row|
         @board.color_at([row, col]).should == :black
       end
     end

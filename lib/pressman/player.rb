@@ -53,8 +53,8 @@ module Pressman
 
     def empty_starting_squares(board)
       row = board.starting_row[color]
-      squares = ELEMENT.collect{|col| [row, col]}
-      squares.select{|coord| board.color_at(coord) == :empty}
+      squares = (0..MAX_COL).collect{ |col| [row, col] }
+      squares.select{ |coord| board.color_at(coord).nil? }
     end
 
     def regenerate_stone(board, stone)
@@ -65,7 +65,7 @@ module Pressman
     end
 
     def capture_stone(board, dest_coord)
-      if board.color_at(dest_coord) != :empty
+      unless board.color_at(dest_coord).nil?
         board.pick_up_stone(dest_coord)
       end
     end

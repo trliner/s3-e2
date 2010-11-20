@@ -23,29 +23,29 @@ module Pressman
 
   def valid_up_moves(player, stone_coord)
     row, col = stone_coord
-    rows = ELEMENT.to_a.select{|e| e < row}
-    coords = rows.reverse.collect{|r| [r, col]}
+    rows = (0...row).to_a
+    coords = rows.reverse.collect{|row| [row, col]}
     filter_valid_moves(player, coords)
   end
 
   def valid_down_moves(player, stone_coord)
     row, col = stone_coord
-    rows = ELEMENT.to_a.select{|e| e > row}
-    coords = rows.collect{|r| [r, col]}
+    rows = ((row + 1)..MAX_ROW).to_a
+    coords = rows.collect{|row| [row, col]}
     filter_valid_moves(player, coords)
   end
 
   def valid_left_moves(player, stone_coord)
     row, col = stone_coord
-    cols = ELEMENT.to_a.select{|e| e < col}
-    coords = cols.reverse.collect{|c| [row, c]}
+    cols = (0...col).to_a
+    coords = cols.reverse.collect{|col| [row, col]}
     filter_valid_moves(player, coords)
   end
 
   def valid_right_moves(player, stone_coord)
     row, col = stone_coord
-    cols = ELEMENT.to_a.select{|e| e > col}
-    coords = cols.collect{|c| [row, c]}
+    cols = ((col + 1)..MAX_COL).to_a
+    coords = cols.collect{|col| [row, col]}
     filter_valid_moves(player, coords)
   end
 
@@ -107,7 +107,7 @@ module Pressman
       coords.each do |coord|
         value = color_at(coord)
         case value
-        when :empty
+        when nil
           moves << coord
         when player.color
           throw :done

@@ -8,26 +8,15 @@ module Pressman
     attr_reader :starting_row
 
     def initialize(color1, color2)
-      @grid = build_grid
+      @grid = Array.new(8).collect{|x| Array.new(8)}
       @stones = {color1 => 0, color2 => 0}
-      @starting_row = {color1 => ELEMENT.last, color2 => ELEMENT.first}
+      @starting_row = {color1 => MAX_ROW, color2 => 0}
       place_initial_stones(color1, color2)
-    end
-
-    def build_grid
-      grid = []
-      ELEMENT.each do |row|
-        grid[row] = []
-        ELEMENT.each do |col|
-          grid[row][col] = :empty
-        end
-      end
-      grid
     end
 
     def pick_up_stone(coord)
       stone = stone_at(coord)
-      grid[coord.first][coord.last] = :empty
+      grid[coord.first][coord.last] = nil
       stones[stone.color] -= 1
       stone
     end
@@ -39,22 +28,10 @@ module Pressman
     end
 
     def place_initial_stones(color1, color2)
-      ELEMENT.each do |col|
-        bottom_rows.each {|row| place_stone([row, col], color1)}
-        top_rows.each {|row| place_stone([row, col], color2)}
+      (0..MAX_COL).each do |col|
+        BOTTOM_ROWS.each { |row| place_stone([row, col], color1) }
+        TOP_ROWS.each {|row| place_stone([row, col], color2) }
       end
-    end
-
-    def top_rows
-      [ELEMENT.first, ELEMENT.first + 1]
-    end
-
-    def bottom_rows
-      [ELEMENT.last - 1, ELEMENT.last]
-    end
-
-    def random_coordinate
-      [rand(ELEMENT.count), rand(ELEMENT.count)]
     end
 
     def color_at(coord)
@@ -73,8 +50,8 @@ module Pressman
 
     def random_stone(player)
       stone_coords = []
-      ELEMENT.each do |row|
-        ELEMENT.each do |col|
+      (0..MAX_ROW).each do |row|
+        (0..MAX_COL).each do |col|
           stone_coords << [row, col] if color_at([row,col]) == player.color
         end
       end
