@@ -10,7 +10,7 @@ module Pressman
     end
 
     def activated?
-      @active
+      active
     end
 
     def deactivate

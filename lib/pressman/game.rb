@@ -15,18 +15,18 @@ module Pressman
     end
 
     def play_one_turn
-      @current_player.move_stone(@board)
-      @players.reverse!
-      @current_player = @players.first
+      current_player.move_stone(@board)
+      players.reverse!
+      @current_player = players.first
     end
 
     def play
-      self.start
+      start
       winner = nil
       while winner.nil?
-        move = self.play_one_turn
-        @board.stones.each do |stone|
-          winner = self.current_player if (stone.last == 0 || move == :resign)
+        move = play_one_turn
+        board.stones.each do |stone|
+          winner = current_player if (stone.last == 0 || move == :resign)
         end
       end
       winner

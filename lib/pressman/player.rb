@@ -18,7 +18,7 @@ module Pressman
         if board.color_at(dest_coord) != :empty
           board.pick_up_stone(dest_coord)
         end
-        board.place_stone(dest_coord, self.color, stone)
+        board.place_stone(dest_coord, color, stone)
         if on_opposite_side?(board, dest_coord)
           if (
             !empty_starting_squares(board).empty? &&
@@ -54,25 +54,25 @@ module Pressman
     end
 
     def on_opposite_side?(board, dest_coord)
-      row = board.starting_row.select{|k,v| k != self.color}.first.last
+      row = board.starting_row.select{|k,v| k != color}.first.last
       dest_coord.first == row
     end
 
     def in_friendly_territory?(board, dest_coord)
-      home_row = board.starting_row[self.color]
+      home_row = board.starting_row[color]
       (dest_coord.first.to_f - home_row.to_f).abs <= 3
     end
 
     def empty_starting_squares(board)
-      row = board.starting_row[self.color]
+      row = board.starting_row[color]
       squares = ELEMENT.collect{|col| [row, col]}
       squares.select{|coord| board.color_at(coord) == :empty}
     end
 
     def regenerate_stone(board)
-      squares = self.empty_starting_squares(board)
+      squares = empty_starting_squares(board)
       regen_coord = squares[rand(squares.count)]
-      board.place_stone(regen_coord, self.color)
+      board.place_stone(regen_coord, color)
     end
 
   end
