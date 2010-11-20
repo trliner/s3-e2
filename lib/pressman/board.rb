@@ -8,7 +8,7 @@ module Pressman
     attr_reader :starting_row
 
     def initialize(color1, color2)
-      @grid = Array.new(8).collect{|x| Array.new(8)}
+      @grid = Array.new(8).collect{|x| Array.new(8){:empty}}
       @stones = {color1 => 0, color2 => 0}
       @starting_row = {color1 => MAX_ROW, color2 => 0}
       place_initial_stones(color1, color2)
@@ -16,7 +16,7 @@ module Pressman
 
     def pick_up_stone(coord)
       stone = stone_at(coord)
-      grid[coord.first][coord.last] = nil
+      grid[coord.first][coord.last] = :empty
       stones[stone.color] -= 1
       stone
     end

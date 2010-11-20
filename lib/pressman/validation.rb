@@ -107,7 +107,7 @@ module Pressman
       coords.each do |coord|
         value = color_at(coord)
         case value
-        when nil
+        when :empty
           moves << coord
         when player.color
           throw :done

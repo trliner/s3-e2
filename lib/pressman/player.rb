@@ -55,7 +55,7 @@ module Pressman
       row = board.starting_row[color]
       square_coords = []
       board.grid[row].each_with_index do |square, col|
-        square_coords << [row, col] if square.nil?
+        square_coords << [row, col] if square == :empty
       end
       square_coords
     end
@@ -68,7 +68,7 @@ module Pressman
     end
 
     def capture_stone(board, dest_coord)
-      unless board.color_at(dest_coord).nil?
+      unless board.color_at(dest_coord) == :empty
         board.pick_up_stone(dest_coord)
       end
     end
