@@ -2,6 +2,7 @@ module Pressman
   class Board
 
     include Validation
+    include Random #not needed when gui is implemented
 
     attr_accessor :grid
     attr_accessor :stones
@@ -36,28 +37,8 @@ module Pressman
       end
     end
 
-    def color_at(coord)
-      contents = grid[coord.first.to_i][coord.last.to_i]
-      contents.class == Stone ? contents.color : contents
-    end
-
     def stone_at(coord)
       grid[coord.first.to_i][coord.last.to_i]
-    end
-
-    def random_destination(player, stone_coord)
-      destinations = valid_destinations(player, stone_coord)
-      destinations[rand(destinations.count)]
-    end
-
-    def random_stone_coord(player)
-      stone_coords = []
-      grid.each_with_index do |col_array, row|
-        col_array.each_index do |col|
-          stone_coords << [row, col] if valid_stone?(player, [row,col])
-        end
-      end
-      stone_coords[rand(stone_coords.count)]
     end
 
   end

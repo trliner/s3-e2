@@ -83,6 +83,13 @@ describe Pressman::Board, "when validating moves" do
     @board.valid_dest?(@white, [1,7], [4,4]).should == true
   end
 
+  it "doesn't allow moves in other directions" do
+    @board.valid_dest?(@black, [6,0], [4,1]).should == false
+  end
 
+  it "doesn't allow players to jump stones" do
+    @board.place_stone([4,0], @white.color)
+    @board.valid_dest?(@black, [6,0], [3,0]).should == false
+  end
 
 end

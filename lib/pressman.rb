@@ -5,6 +5,7 @@ module Pressman
   BOTTOM_ROWS = [MAX_ROW - 1, MAX_ROW]
 end
 
+require 'pressman/random' # not needed when gui is implemented
 require 'pressman/validation'
 require 'pressman/board'
 require 'pressman/player'

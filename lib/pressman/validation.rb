@@ -1,124 +1,75 @@
 module Pressman
   module Validation
 
-  def valid_stone?(player, stone_coord)
-    player.color == color_at(stone_coord) &&
-    !valid_destinations(player, stone_coord).empty?
-  end
-
-  def valid_dest?(player, stone_coord, dest_coord)
-    valid_destinations(player, stone_coord).include?(dest_coord)
-  end
-
-  def valid_destinations(player, stone_coord)
-    valid_up_moves(player, stone_coord) +
-    valid_down_moves(player, stone_coord) +
-    valid_left_moves(player, stone_coord) +
-    valid_right_moves(player, stone_coord) +
-    valid_up_right_moves(player, stone_coord) +
-    valid_down_right_moves(player, stone_coord) +
-    valid_up_left_moves(player, stone_coord) +
-    valid_down_left_moves(player, stone_coord)
-  end
-
-  def valid_up_moves(player, stone_coord)
-    row, col = stone_coord
-    rows = (0...row).to_a
-    coords = rows.reverse.collect{|row| [row, col]}
-    filter_valid_moves(player, coords)
-  end
-
-  def valid_down_moves(player, stone_coord)
-    row, col = stone_coord
-    rows = ((row + 1)..MAX_ROW).to_a
-    coords = rows.collect{|row| [row, col]}
-    filter_valid_moves(player, coords)
-  end
-
-  def valid_left_moves(player, stone_coord)
-    row, col = stone_coord
-    cols = (0...col).to_a
-    coords = cols.reverse.collect{|col| [row, col]}
-    filter_valid_moves(player, coords)
-  end
-
-  def valid_right_moves(player, stone_coord)
-    row, col = stone_coord
-    cols = ((col + 1)..MAX_COL).to_a
-    coords = cols.collect{|col| [row, col]}
-    filter_valid_moves(player, coords)
-  end
-
-  def valid_up_right_moves(player, stone_coord)
-    row, col = stone_coord
-    coords = []
-    row -= 1
-    col += 1
-    while row >= 0 && col <= MAX_ROW
-      coords << [row, col]
-      row -= 1
-      col += 1
+    def valid_stone?(player, stone_coord)
+      player.color == color_at(stone_coord) &&
+      empty_adjacent_space?(stone_coord)
     end
-    filter_valid_moves(player, coords)
-  end
 
-  def valid_down_right_moves(player, stone_coord)
-    row, col = stone_coord
-    coords = []
-    row += 1
-    col += 1
-    while row <= MAX_ROW && col <= MAX_COL
-      coords << [row, col]
-      row += 1
-      col += 1
+    def valid_dest?(player, stone_coord, dest_coord)
+      direction = valid_direction(stone_coord, dest_coord)
+      !direction.nil? &&
+      valid_square?(player, dest_coord) &&
+      valid_path?(direction, stone_coord, dest_coord)
     end
-    filter_valid_moves(player, coords)
-  end
 
-  def valid_up_left_moves(player, stone_coord)
-    row, col = stone_coord
-    coords = []
-    row -= 1
-    col -= 1
-    while row >= 0 && col >= 0
-      coords << [row, col]
-      row -= 1
-      col -= 1
+    def color_at(coord)
+      contents = grid[coord.first.to_i][coord.last.to_i]
+      contents.class == Stone ? contents.color : contents
     end
-    filter_valid_moves(player, coords)
-  end
 
-  def valid_down_left_moves(player, stone_coord)
-    row, col = stone_coord
-    coords = []
-    row += 1
-    col -= 1
-    while row <= MAX_ROW && col >= 0
-      coords << [row, col]
-      row += 1
-      col -= 1
-    end
-    filter_valid_moves(player, coords)
-  end
-
-  def filter_valid_moves(player, coords)
-    moves = []
-    catch (:done) do
-      coords.each do |coord|
-        value = color_at(coord)
-        case value
-        when :empty
-          moves << coord
-        when player.color
-          throw :done
-        else
-          moves << coord
-          throw :done
+    def empty_adjacent_space?(stone_coord)
+      row, col = stone_coord
+      row_range = (row == 0 ? 0 : row-1)..(row == MAX_ROW ? MAX_ROW : row+1)
+      row_range.each do |r|
+        ((col - 1)..(col + 1)).each do |c|
+          return true if stone_at([r,c]) == :empty && [r,c] != [row,col]
         end
       end
+      false
     end
-    moves
-  end
+
+    def valid_square?(player, dest_coord)
+      contents = color_at(dest_coord)
+      contents != player.color && contents != nil
+    end
+
+    def valid_path?(direction, stone_coord, dest_coord)
+      sorted_rows = [stone_coord.first, dest_coord.first].sort
+      sorted_cols = [stone_coord.last, dest_coord.first].sort
+      case direction
+      when :horizontal
+        cols = (sorted_cols.first..sorted_cols.last).to_a
+        rows = [stone_coord.first] * cols.size
+      when :vertical
+        rows = (sorted_rows.first..sorted_rows.last).to_a
+        cols = rows.collect{|r| stone_coord.last}
+      when :diagonal
+        rows = (sorted_rows.first..sorted_rows.last).to_a
+        cols = rows.collect{|r| stone_coord.last}
+      else
+        return false
+      end
+      path_coords = rows.zip(cols) - [stone_coord, dest_coord]
+      empty_path?(path_coords)
+    end
+
+    def valid_direction(stone_coord, dest_coord)
+      row_diff = stone_coord.first - dest_coord.first
+      col_diff = stone_coord.last - dest_coord.last
+
+      return :horizontal if row_diff == 0
+      return :vertical if col_diff == 0
+      return :diagonal if col_diff.abs == row_diff.abs
+      nil
+    end
+
+    def empty_path?(path_coords)
+      path_coords.each do |coord|
+        return false if stone_at(coord) != :empty
+      end
+      true
+    end
 
   end
 end

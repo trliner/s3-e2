@@ -9,9 +9,8 @@ module Pressman
 
     def move_stone(board, opts = {})
       return :resign if opts[:resign]
-      stone_coord = select_stone(board, opts.delete(:stone))
+      stone_coord, dest_coord = select_coords(board, opts)
       stone = board.pick_up_stone(stone_coord)
-      dest_coord = select_dest(board, stone_coord, opts.delete(:dest))
       capture_stone(board, dest_coord)
       board.place_stone(dest_coord, color, stone)
       if on_opposite_side?(board, dest_coord) && stone.activated?
@@ -22,23 +21,18 @@ module Pressman
       end
     end
 
-    def select_stone(board, stone_opt)
-      if stone_opt.class == Array && board.valid_stone?(self, stone_opt)
-        stone_opt
-      else
-        board.random_stone_coord(self)
+    def select_coords(board, opts)
+      stone_coord = opts[:stone]
+      dest_coord = opts[:dest]
+      if !stone_coord || !board.valid_stone?(self, stone_coord)
+        # Will ask player for new stone coord if gui is implemented
+        stone_coord = board.random_stone_coord(self)
       end
-    end
-
-    def select_dest(board, stone_coord, dest_opt)
-      if (
-        dest_opt.class == Array &&
-        board.valid_dest?(self, stone_coord, dest_opt)
-      )
-        dest_opt
-      else
-        board.random_destination(self, stone_coord)
+      if !dest_coord || !board.valid_dest?(self, stone_coord, dest_coord)
+        # Will ask player for new dest coord if gui is implemented
+        dest_coord = board.random_destination(self, stone_coord)
       end
+      [stone_coord, dest_coord]
     end
 
     def on_opposite_side?(board, dest_coord)
@@ -68,7 +62,7 @@ module Pressman
     end
 
     def capture_stone(board, dest_coord)
-      unless board.color_at(dest_coord) == :empty
+      unless board.stone_at(dest_coord) == :empty
         board.pick_up_stone(dest_coord)
       end
     end

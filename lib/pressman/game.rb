@@ -24,10 +24,10 @@ module Pressman
       start
       winner = nil
       while winner.nil?
+        enemy_stone_count = board.stones[@players.last.color]
+        winner = current_player if enemy_stone_count
         move = play_one_turn
-        board.stones.each do |stone|
-          winner = current_player if (stone.last == 0 || move == :resign)
-        end
+        winner = current_player if move == :resign
       end
       winner
     end
